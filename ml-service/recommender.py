@@ -3,15 +3,15 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 try:
-    # Load cleaned dataset
-    df = pd.read_csv('cleaned_courses.csv')
+    # Load merged dataset
+    df = pd.read_csv('merged_courses.csv')
     
     # Initialize TF-IDF
     tfidf = TfidfVectorizer(stop_words='english')
     tfidf_matrix = tfidf.fit_transform(df['content'].fillna(''))
     
 except FileNotFoundError:
-    print("Warning: cleaned_courses.csv not found. Recommender will return empty.")
+    print("Warning: merged_courses.csv not found. Recommender will return empty.")
     df = pd.DataFrame()
     tfidf_matrix = None
 
@@ -31,11 +31,11 @@ def get_paid_recommendations(topic, top_k=5):
             if cosine_sim[i] > 0.0:
                 course = df.iloc[i]
                 results.append({
-                    'title': str(course['course_title']),
+                    'title': str(course['title']),
                     'level': str(course['level']),
                     'url': str(course['url']),
                     'price': float(course['price']) if pd.notnull(course['price']) else 0.0,
-                    'is_paid': 'Paid',
+                    'is_paid': str(course['is_paid']),
                     'relevance_score': float(cosine_sim[i])
                 })
                 
