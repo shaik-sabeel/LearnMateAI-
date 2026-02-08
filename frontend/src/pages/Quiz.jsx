@@ -13,6 +13,7 @@ export default function Quiz() {
     const [quiz, setQuiz] = useState([]);
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [score, setScore] = useState(0);
+    const [userAnswers, setUserAnswers] = useState([]);
     const [showResult, setShowResult] = useState(false);
     const [loading, setLoading] = useState(false);
     const [predictedLevel, setPredictedLevel] = useState('');
@@ -22,9 +23,10 @@ export default function Quiz() {
         setLoading(true);
         try {
             const res = await api.post('/quiz/generate', { topic, difficulty });
-            setQuiz(res.data);
+            setQuiz(res.data.quiz);
             setCurrentQuestion(0);
             setScore(0);
+            setUserAnswers([]);
             setShowResult(false);
             setPredictedLevel('');
         } catch (err) {
@@ -34,38 +36,46 @@ export default function Quiz() {
         }
     };
 
-    const handleOptionClick = async (option) => {
-        let newScore = score;
-        if (option === quiz[currentQuestion].answer) {
-            newScore = score + 1;
-            setScore(newScore);
-        }
+    const handleOptionClick = (option) => {
+        // Record answer
+        const currentAnswer = option;
+        const newAnswers = [...userAnswers];
+        newAnswers[currentQuestion] = currentAnswer;
+        setUserAnswers(newAnswers);
 
+        // Move to next question or finish
         if (currentQuestion + 1 < quiz.length) {
             setCurrentQuestion(currentQuestion + 1);
         } else {
-            await finishQuizWithScore(newScore);
+            finishQuizWithSubmit(newAnswers);
         }
-    }
+    };
 
-    const finishQuizWithScore = async (finalScore) => {
-        setShowResult(true);
+    const finishQuizWithSubmit = async (finalAnswers) => {
+        setLoading(true);
         try {
-            await api.post('/quiz/save', {
+            const res = await api.post('/quiz/submit', {
                 topic,
-                score: finalScore,
-                totalQuestions: quiz.length
+                difficulty,
+                questions: quiz,
+                userAnswers: finalAnswers
             });
 
-            // Predict Gap
+            setScore(res.data.score);
+            setShowResult(true);
+
+            // Predict Gap (Optional - can be moved to backend trigger if desired, but keeping frontend flow for now)
             const gapRes = await api.post('/quiz/predict-gap', {
-                quiz_score: finalScore,
+                quiz_score: res.data.score,
                 total_questions: quiz.length
             });
             setPredictedLevel(gapRes.data.level);
 
         } catch (err) {
             console.error(err);
+            alert('Error submitting quiz');
+        } finally {
+            setLoading(false);
         }
     };
 
