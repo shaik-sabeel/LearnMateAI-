@@ -23,11 +23,22 @@ router.post('/', auth, async (req, res) => {
         await userChat.save();
 
         // Call Gemini API
-        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+        console.log("Chat Request received. Using model: gemini-flash-latest");
+        const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
 
         // Construct prompt with context
-        const prompt = `You are an expert technical tutor. helping a student. 
-        User asks: ${message}
+        const prompt = `You are an expert technical tutor named 'LearnMate AI'. 
+        Your goal is to help students learn complex topics in a simple, engaging, and interactive way.
+        
+        User asks: "${message}"
+        
+        Instructions:
+        1. Answer the question accurately and concisely.
+        2. Use examples or analogies if the topic is complex.
+        3. Break down the explanation into digestable parts.
+        4. If the user asks for code, provide clean, commented code snippets.
+        5. Be encouraging and supportive.
+        
         Provide a helpful, educational response.`;
 
         const result = await model.generateContent(prompt);
@@ -44,7 +55,7 @@ router.post('/', auth, async (req, res) => {
 
         res.json({ response: text });
     } catch (err) {
-        console.error(err.message);
+        console.error("Chat Error:", err.message);
         res.status(500).send('Server Error');
     }
 });

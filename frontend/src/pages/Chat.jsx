@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import api from '../services/api';
 import Navbar from '../components/Navbar';
 import { Card } from "@/components/ui/card";
@@ -79,7 +81,36 @@ export default function Chat() {
                                         ? 'bg-primary text-primary-foreground rounded-br-none'
                                         : 'bg-muted/50 backdrop-blur-md rounded-bl-none border border-border/50'}
                 `}>
-                                    {msg.message}
+                                    {msg.role === 'model' ? (
+                                        <div className="prose prose-invert prose-sm max-w-none">
+                                            <ReactMarkdown
+                                                remarkPlugins={[remarkGfm]}
+                                                components={{
+                                                    code({ node, inline, className, children, ...props }) {
+                                                        const match = /language-(\w+)/.exec(className || '')
+                                                        return !inline && match ? (
+                                                            <div className="rounded-md overflow-hidden my-2">
+                                                                <div className="bg-muted px-4 py-1 text-xs text-muted-foreground border-b border-border/50 flex justify-between items-center">
+                                                                    <span>{match[1]}</span>
+                                                                </div>
+                                                                <code className={`${className} block bg-black/50 p-4 overflow-x-auto`} {...props}>
+                                                                    {children}
+                                                                </code>
+                                                            </div>
+                                                        ) : (
+                                                            <code className="bg-muted/50 px-1 py-0.5 rounded text-primary-foreground font-mono text-xs" {...props}>
+                                                                {children}
+                                                            </code>
+                                                        )
+                                                    }
+                                                }}
+                                            >
+                                                {msg.message}
+                                            </ReactMarkdown>
+                                        </div>
+                                    ) : (
+                                        msg.message
+                                    )}
                                 </div>
                                 {msg.role === 'user' && (
                                     <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-secondary-foreground shrink-0">
