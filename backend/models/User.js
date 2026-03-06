@@ -14,10 +14,26 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    date: {
+    createdAt: {
         type: Date,
         default: Date.now
-    }
+    },
+    xp: {
+        type: Number,
+        default: 0
+    },
+    level: {
+        type: Number,
+        default: 1
+    },
+    badges: [{
+        title: String,
+        icon: String,
+        dateEarned: {
+            type: Date,
+            default: Date.now
+        }
+    }]
 });
 
 module.exports = mongoose.model('User', UserSchema);

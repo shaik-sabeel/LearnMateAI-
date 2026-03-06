@@ -127,11 +127,45 @@ router.post('/submit', auth, async (req, res) => {
 
         await newResult.save();
 
+        // --- Gamification Logic Start ---
+        const User = require('../models/User');
+        const user = await User.findById(req.user.id);
+
+        let xpGained = (score * 10) + 20; // 10 XP per correct answer + 20 XP bonus
+        user.xp += xpGained;
+
+        // Level Up Logic: Each level requires level * 100 XP
+        const xpNeeded = user.level * 100;
+        let leveledUp = false;
+        if (user.xp >= xpNeeded) {
+            user.level += 1;
+            user.xp -= xpNeeded; // Reset XP progress for next level (or keep overflow if preferred)
+            leveledUp = true;
+        }
+
+        // Badge Logic: "Quiz Master" for perfect score
+        if (score === questions.length) {
+            const hasBadge = user.badges.some(b => b.title === 'Quiz Master');
+            if (!hasBadge) {
+                user.badges.push({
+                    title: 'Quiz Master',
+                    icon: '🏆'
+                });
+            }
+        }
+
+        await user.save();
+        // --- Gamification Logic End ---
+
         res.json({
             score,
             total: questions.length,
             message: 'Quiz submitted successfully',
-            resultId: newResult._id
+            resultId: newResult._id,
+            xpGained,
+            newXp: user.xp,
+            newLevel: user.level,
+            leveledUp
         });
     } catch (err) {
         console.error(err.message);

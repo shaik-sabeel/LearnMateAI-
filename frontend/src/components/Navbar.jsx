@@ -39,6 +39,15 @@ export default function Navbar() {
                         AI Tutor
                     </Link>
                     <Link
+                        to="/roadmap"
+                        className={cn(
+                            "text-sm font-medium transition-all hover:text-primary",
+                            isActive('/roadmap') ? "text-primary scale-105" : "text-muted-foreground"
+                        )}
+                    >
+                        Roadmap
+                    </Link>
+                    <Link
                         to="/quiz"
                         className={cn(
                             "text-sm font-medium transition-all hover:text-primary",

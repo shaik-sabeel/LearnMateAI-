@@ -10,10 +10,21 @@ export default function Dashboard() {
     const [search, setSearch] = useState('');
     const [recommendations, setRecommendations] = useState({ paid_courses: [], free_youtube_resources: [] });
     const [loading, setLoading] = useState(false);
+    const [userStats, setUserStats] = useState({ xp: 0, level: 1, badges: [], name: 'User' });
 
     useEffect(() => {
         fetchResources();
+        fetchStats();
     }, []);
+
+    const fetchStats = async () => {
+        try {
+            const res = await api.get('/achievement/stats');
+            setUserStats(res.data);
+        } catch (err) {
+            console.error("Error fetching stats:", err);
+        }
+    };
 
     const fetchResources = async () => {
         try {
@@ -70,6 +81,56 @@ export default function Dashboard() {
                             {loading ? 'Searching...' : 'Search'}
                         </Button>
                     </form>
+                </div>
+
+                {/* Achievement & Progress Section */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 animate-in fade-in slide-in-from-top-4 duration-500">
+                    <Card className="glass-card border-l-4 border-l-primary flex flex-col justify-center p-6">
+                        <div className="flex items-center justify-between mb-4">
+                            <span className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Current Level</span>
+                            <span className="text-3xl font-bold text-primary">Lv. {userStats.level}</span>
+                        </div>
+                        <div className="w-full bg-muted/30 rounded-full h-3 overflow-hidden border border-border/50">
+                            <div
+                                className="bg-gradient-to-r from-primary to-purple-500 h-full transition-all duration-1000 ease-out"
+                                style={{ width: `${(userStats.xp / (userStats.level * 100)) * 100}%` }}
+                            ></div>
+                        </div>
+                        <div className="flex justify-between mt-2 text-xs text-muted-foreground">
+                            <span>{userStats.xp} XP</span>
+                            <span>Next Level: {userStats.level * 100} XP</span>
+                        </div>
+                    </Card>
+
+                    <Card className="glass-card md:col-span-2 p-6 flex items-center gap-8">
+                        <div>
+                            <h3 className="text-lg font-semibold mb-1">Badges Earned</h3>
+                            <p className="text-sm text-muted-foreground mb-4">Keep learning to unlock more!</p>
+                            <div className="flex flex-wrap gap-3">
+                                {userStats.badges.length > 0 ? userStats.badges.map((badge, i) => (
+                                    <div key={i} className="flex flex-col items-center gap-1 group">
+                                        <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform cursor-default shadow-sm" title={badge.title}>
+                                            {badge.icon}
+                                        </div>
+                                        <span className="text-[10px] font-medium text-primary uppercase">{badge.title}</span>
+                                    </div>
+                                )) : (
+                                    <div className="text-sm text-muted-foreground italic opacity-60 flex items-center gap-2">
+                                        <span>No badges yet. Complete a quiz to earn one!</span>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        <div className="hidden lg:block ml-auto opacity-20 hover:opacity-40 transition-opacity">
+                            <div className="relative w-24 h-24">
+                                <div className="absolute inset-0 border-4 border-primary/30 rounded-full animate-ping"></div>
+                                <div className="absolute inset-0 border-4 border-primary/50 rounded-full"></div>
+                                <div className="absolute inset-0 flex items-center justify-center font-bold text-primary">
+                                    {Math.floor((userStats.badges.length / 5) * 100)}%
+                                </div>
+                            </div>
+                        </div>
+                    </Card>
                 </div>
 
                 {recommendations.paid_courses?.length > 0 && (

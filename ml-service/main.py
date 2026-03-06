@@ -18,6 +18,7 @@ def read_root():
 from recommender import get_paid_recommendations
 from youtube_fetcher import fetch_youtube_videos
 from predictor import predict_level
+from roadmap import generate_roadmap
 
 @app.post("/ml/recommend")
 def recommend_resources(request: ResourceRequest):
@@ -31,6 +32,11 @@ def recommend_resources(request: ResourceRequest):
         # Keep legacy field for compatibility if frontend expects flat list initially
         "recommendations": paid_courses + free_videos 
     }
+
+@app.post("/ml/roadmap")
+def get_roadmap(request: ResourceRequest):
+    roadmap = generate_roadmap(request.topic)
+    return {"topic": request.topic, "roadmap": roadmap}
 
 @app.post("/ml/predict-gap")
 def predict_gap(request: GapPredictionRequest):

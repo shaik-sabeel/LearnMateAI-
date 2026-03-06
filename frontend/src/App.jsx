@@ -5,6 +5,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Chat from './pages/Chat';
 import Quiz from './pages/Quiz';
+import Roadmap from './pages/Roadmap';
 import Home from './pages/Home';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/chat" element={<Chat />} />
+          <Route path="/roadmap" element={<Roadmap />} />
           <Route path="/quiz" element={<Quiz />} />
         </Routes>
       </div>

@@ -18,6 +18,8 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/learnmate
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/resources', require('./routes/resources'));
+app.use('/api/roadmap', require('./routes/roadmap'));
+app.use('/api/achievement', require('./routes/achievement'));
 app.use('/api/chat', require('./routes/chat'));
 app.use('/api/quiz', require('./routes/quiz'));
 
