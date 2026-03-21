@@ -16,8 +16,8 @@ export default function Navbar() {
     return (
         <nav className="sticky top-0 z-50 glass">
             <div className="flex h-16 items-center px-6 container mx-auto">
-                <Link to="/dashboard" className="text-2xl font-bold bg-gradient-to-r from-primary to-purple-400 bg-clip-text text-transparent hover:opacity-80 transition-opacity">
-                    LearnMate AI++
+                <Link to="/dashboard" className="text-xl font-semibold tracking-tight text-foreground hover:opacity-80 transition-opacity flex items-center gap-2">
+                    <span className="w-5 h-5 bg-primary rounded-sm block"></span> LearnMate
                 </Link>
                 <div className="ml-auto flex items-center space-x-6">
                     <Link
@@ -48,6 +48,24 @@ export default function Navbar() {
                         Roadmap
                     </Link>
                     <Link
+                        to="/mock-interview"
+                        className={cn(
+                            "text-sm font-medium transition-all hover:text-primary",
+                            isActive('/mock-interview') ? "text-primary" : "text-muted-foreground"
+                        )}
+                    >
+                        Interviews
+                    </Link>
+                    <Link
+                        to="/resume-analyzer"
+                        className={cn(
+                            "text-sm font-medium transition-all hover:text-primary",
+                            isActive('/resume-analyzer') ? "text-primary scale-105" : "text-muted-foreground"
+                        )}
+                    >
+                        📄 Resume Analyzer
+                    </Link>
+                    <Link
                         to="/quiz"
                         className={cn(
                             "text-sm font-medium transition-all hover:text-primary",
@@ -55,6 +73,21 @@ export default function Navbar() {
                         )}
                     >
                         Quiz
+                    </Link>
+                    <Link
+                        to="/leaderboard"
+                        className={cn(
+                            "text-sm font-medium transition-all hover:text-primary",
+                            isActive('/leaderboard') ? "text-primary scale-105" : "text-muted-foreground"
+                        )}
+                    >
+                        Leaderboard
+                    </Link>
+                    <Link
+                        to="/pricing"
+                        className="text-sm font-medium bg-foreground text-background px-4 py-1.5 rounded-md hover:bg-foreground/90 transition-colors"
+                    >
+                        Upgrade
                     </Link>
                     <Button variant="ghost" size="sm" onClick={handleLogout} className="text-destructive hover:bg-destructive/10">
                         Logout

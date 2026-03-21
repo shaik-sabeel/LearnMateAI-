@@ -33,7 +33,27 @@ const UserSchema = new mongoose.Schema({
             type: Date,
             default: Date.now
         }
-    }]
+    }],
+    credits: {
+        type: Number,
+        default: 5
+    },
+    streak: {
+        type: Number,
+        default: 0
+    },
+    lastLogin: {
+        type: Date,
+        default: null
+    },
+    isPro: {
+        type: Boolean,
+        default: false
+    },
+    onboardingCompleted: {
+        type: Boolean,
+        default: false
+    }
 });
 
 module.exports = mongoose.model('User', UserSchema);

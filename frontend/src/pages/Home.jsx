@@ -1,54 +1,100 @@
+import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { PlayCircle, ShieldCheck, Zap, Server, ChevronRight } from "lucide-react";
 
 export default function Home() {
-    return (
-        <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
-            {/* Background Gradients */}
-            <div className="absolute top-0 left-0 w-full h-full bg-background -z-20" />
-            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary/20 blur-[120px] -z-10 animate-float" />
-            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-purple-500/20 blur-[120px] -z-10 animate-pulse" />
+    const containerRef = useRef(null);
 
-            <div className="container mx-auto px-4 text-center z-10">
-                <div className="inline-block mb-4 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-medium animate-fade-in-up">
-                    🚀 Next-Gen AI Learning
+    return (
+        <div ref={containerRef} className="min-h-screen flex flex-col items-center justify-start bg-background overflow-hidden pt-32 relative">
+            
+            {/* Live Background Overlay - A subtle grid that pans with mouse might also be nice, but Shery follower is active */}
+            <div className="container mx-auto px-6 max-w-5xl z-10 flex flex-col items-center text-center relative">
+                
+                {/* Subtle Update Badge */}
+                <div className="magnet-target inline-flex items-center gap-2 mb-10 px-3 py-1.5 rounded-full border border-border bg-secondary text-secondary-foreground text-xs font-semibold cursor-pointer hover:bg-secondary/80 transition-colors">
+                    <span className="flex h-2 w-2 rounded-full bg-blue-500"></span> 
+                    LearnMate Pro officially out of private beta <ChevronRight size={14} className="opacity-70" />
                 </div>
 
-                <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 bg-gradient-to-r from-white via-gray-200 to-gray-500 bg-clip-text text-transparent drop-shadow-sm">
-                    Master Any Skill with <br />
-                    <span className="bg-gradient-to-r from-primary to-purple-400 bg-clip-text text-transparent">LearnMate AI++</span>
+                {/* Main Headline */}
+                <h1 className="text-animate text-5xl sm:text-7xl font-bold tracking-tight mb-6 leading-tight max-w-4xl cursor-default">
+                    The modern standard <br className="hidden sm:block" />
+                    for <span className="text-muted-foreground">learning engineering.</span>
                 </h1>
 
-                <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
-                    Your personal AI tutor that adapts to your learning style. Get tailored resources, smart quizzes, and instant feedback.
+                {/* Subtitle */}
+                <p className="text-xl text-muted-foreground mb-12 max-w-2xl leading-relaxed">
+                    Instantly generate structured curriculums, mock interviews, and skill assessments. Engineered for speed and precision.
                 </p>
 
-                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                    <Link to="/login">
-                        <Button size="lg" className="h-12 px-8 text-lg shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all hover:scale-105">
-                            Get Started
+                {/* High-Contrast CTA Buttons */}
+                <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto z-20">
+                    <Link to="/register" className="w-full sm:w-auto">
+                        <Button size="lg" className="magnet-target w-full h-12 px-8 text-base font-medium transition-transform active:scale-95 bg-primary text-primary-foreground hover:bg-primary/90 rounded-md shadow-sm">
+                            Start Building Now
                         </Button>
                     </Link>
-                    <Link to="/register">
-                        <Button variant="outline" size="lg" className="h-12 px-8 text-lg border-primary/20 hover:bg-primary/10 hover:text-primary transition-all">
-                            Create Account
+                    <Link to="/login" className="w-full sm:w-auto">
+                        <Button variant="outline" size="lg" className="magnet-target w-full h-12 px-8 text-base font-medium rounded-md gap-2 border-border bg-transparent hover:bg-secondary transition-colors">
+                            <PlayCircle size={18} /> View Documentation
                         </Button>
                     </Link>
                 </div>
 
-                {/* Feature Cards Preview */}
-                <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-                    {[
-                        { title: "AI Tutor", desc: "24/7 technical support from our advanced Gemini-powered assistant.", icon: "🤖" },
-                        { title: "Smart Quizzes", desc: "Generate quizzes on any topic instantly and test your knowledge.", icon: "📝" },
-                        { title: "Gap Analysis", desc: "Discover your weak spots and get personalized recommendations.", icon: "📊" }
-                    ].map((feature, i) => (
-                        <div key={i} className="glass-card p-6 rounded-2xl hover:border-primary/50 transition-colors group">
-                            <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">{feature.icon}</div>
-                            <h3 className="text-xl font-bold mb-2 text-foreground">{feature.title}</h3>
-                            <p className="text-muted-foreground">{feature.desc}</p>
+                {/* Developer-focused image / code mockup area */}
+                <div className="hover-3d mt-20 w-full relative group cursor-crosshair perspective-1000">
+                    <div className="w-full h-[400px] rounded-xl border border-border bg-[#0a0a0a] shadow-2xl overflow-hidden flex flex-col hover-tilt transform-style-3d">
+                        <div className="h-10 bg-[#111] border-b border-white/5 flex items-center px-4 gap-2">
+                            <div className="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50"></div>
+                            <div className="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50"></div>
+                            <div className="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50"></div>
                         </div>
-                    ))}
+                        <div className="p-6 font-mono text-sm text-left opacity-70">
+                            <div className="text-purple-400">import</div> {'{'} LearnMate {'}'} <div className="text-purple-400 inline">from</div> <span className="text-green-300">'@ai/core'</span>;
+                            <br/><br/>
+                            <div className="text-blue-400">const</div> tutor = <div className="text-blue-400 inline">new</div> LearnMate();
+                            <br/><br/>
+                            <div className="text-gray-500">// Start generating a complete roadmap in ms</div>
+                            <br/>
+                            <div className="text-blue-400">await</div> tutor.<div className="text-yellow-200">generateRoadmap</div>({'{'}<br/>
+                            &nbsp;&nbsp;topic: <span className="text-green-300">'System Design'</span>,<br/>
+                            &nbsp;&nbsp;depth: <span className="text-green-300">'Senior Engineer'</span>,<br/>
+                            {'}'});
+                            <br/><br/>
+                            <span className="animate-pulse">_</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Minimalist Feature Grid */}
+                <div className="mt-40 w-full pb-32">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div className="magnet-target text-left border-l border-border pl-6 p-4 rounded-xl hover:bg-secondary/20 transition-colors">
+                            <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-6 text-foreground">
+                                <Zap size={24} />
+                            </div>
+                            <h3 className="text-xl text-foreground font-semibold mb-3">Sub-second generation</h3>
+                            <p className="text-muted-foreground text-sm leading-relaxed">Built on blazing-fast Gemini architectures. Don't wait minutes for a curriculum map—get it instantly.</p>
+                        </div>
+                        
+                        <div className="magnet-target text-left border-l border-border pl-6 p-4 rounded-xl hover:bg-secondary/20 transition-colors">
+                            <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-6 text-foreground">
+                                <Server size={24} />
+                            </div>
+                            <h3 className="text-xl text-foreground font-semibold mb-3">Production grade accuracy</h3>
+                            <p className="text-muted-foreground text-sm leading-relaxed">Mock interviews simulate real-world technical screens sourced from Big Tech engineering rubrics.</p>
+                        </div>
+
+                        <div className="magnet-target text-left border-l border-border pl-6 p-4 rounded-xl hover:bg-secondary/20 transition-colors">
+                            <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-6 text-foreground">
+                                <ShieldCheck size={24} />
+                            </div>
+                            <h3 className="text-xl text-foreground font-semibold mb-3">Absolute privacy</h3>
+                            <p className="text-muted-foreground text-sm leading-relaxed">Your resume and mock interview transcripts are localized. We never train public models on your private goals.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

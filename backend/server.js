@@ -22,6 +22,9 @@ app.use('/api/roadmap', require('./routes/roadmap'));
 app.use('/api/achievement', require('./routes/achievement'));
 app.use('/api/chat', require('./routes/chat'));
 app.use('/api/quiz', require('./routes/quiz'));
+app.use('/api/payment', require('./routes/payment'));
+app.use('/api/interview', require('./routes/interview'));
+app.use('/api/resume', require('./routes/resume'));
 
 app.get('/', (req, res) => {
   res.send('LearnMate AI++ Backend Running');
